@@ -77,18 +77,18 @@ typedef NS_ENUM(NSUInteger, FLTFirebaseStorageStringType) {
 #pragma mark - FlutterPlugin
 
 // Returns a singleton instance of the Firebase Storage plugin.
-+ (instancetype)sharedInstance:(NSObject<FlutterBinaryMessenger> *)messenger {
-  static dispatch_once_t onceToken;
-  static FLTFirebaseStoragePlugin *instance;
+// + (instancetype)sharedInstance:(NSObject<FlutterBinaryMessenger> *)messenger {
+//   static dispatch_once_t onceToken;
+//   static FLTFirebaseStoragePlugin *instance;
 
-  dispatch_once(&onceToken, ^{
-    instance = [[FLTFirebaseStoragePlugin alloc] init:messenger];
-    // Register with the Flutter Firebase plugin registry.
-    [[FLTFirebasePluginRegistry sharedInstance] registerFirebasePlugin:instance];
-  });
+//   dispatch_once(&onceToken, ^{
+//     instance = [[FLTFirebaseStoragePlugin alloc] init:messenger];
+//     // Register with the Flutter Firebase plugin registry.
+//     [[FLTFirebasePluginRegistry sharedInstance] registerFirebasePlugin:instance];
+//   });
 
-  return instance;
-}
+//   return instance;
+// }
 
 - (instancetype)init:(NSObject<FlutterBinaryMessenger> *)messenger {
   self = [super init];
@@ -111,13 +111,9 @@ typedef NS_ENUM(NSUInteger, FLTFirebaseStorageStringType) {
                                   binaryMessenger:[registrar messenger]];
 
   FLTFirebaseStoragePlugin *instance =
-      [FLTFirebaseStoragePlugin sharedInstance:[registrar messenger]];
-  if (instance.storage_method_channel != nil) {
-    NSLog(@"FLTFirebaseStorage was already registered. If using isolates, you can safely ignore "
-          @"this message.");
-    return;
-  }
+      [[FLTFirebaseStoragePlugin alloc] init:[registrar messenger]];
   instance.storage_method_channel = channel;
+
 #if TARGET_OS_OSX
   // TODO(Salakar): Publish does not exist on MacOS version of FlutterPluginRegistrar.
 #else
